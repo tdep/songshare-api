@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'articles',
     'users',
     'songs',
+    'events',
     'v1',
 ]
 
