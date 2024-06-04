@@ -2,7 +2,9 @@ from rest_framework import serializers
 from articles.models import Article
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')  # to make this a hyperlink, change to Hyperlinked
+
     class Meta:
         model = Article
-        fields = ['id', 'published', 'title', 'content', 'shares']
+        fields = ['id', 'owner', 'published', 'title', 'content', 'shares']
