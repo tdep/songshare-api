@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import article_image_view, success
+from .views import article_image_view, success, display_article_images
 from rest_framework.urlpatterns import format_suffix_patterns
 from articles import views
 
@@ -19,6 +19,9 @@ urlpatterns = [
     path('success',
          success,
          name='success'),
+    path('article_images',
+         display_article_images,
+         name='article_images'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

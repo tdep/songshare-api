@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Article Images</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+    {%  for article in article_images %}
+        <div>
+            {{ article.name }}
+            <img src="{{ article.article_image.url }}" alt="article-image" class="img-responsive" style="float: left; margin-right: 10px;" />
+        </div>
+    {% endfor %}
+</body>
+</html>

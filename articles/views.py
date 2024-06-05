@@ -45,3 +45,12 @@ def article_image_view(request):
 
 def success(request):
     return HttpResponse('successfully uploaded')
+
+
+def display_article_images(request):
+
+    if request.method == 'GET':
+
+        articles = Article.objects.all()
+        return render(request, 'display_article_images.html', {'article_images': articles})
+
