@@ -18,9 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .handlers import url_helper
+
+admin.site.site_title = "SongShareAPI Admin"
+admin.site.site_header = "SongShare administration"
+admin.site.index_title = "Site administration"
+
+# Helper to register all models programmatically.
+url_helper.register_app_models()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('songshareapiadmin/', admin.site.urls),
     path('', include('articles.urls')),
     path('', include('users.urls')),
     path('', include('songs.urls')),

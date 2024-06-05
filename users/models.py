@@ -31,14 +31,16 @@ class User(AbstractUser):
         upload_to='images/',
         force_format='PNG')
 
+    class Meta:
+        verbose_name = "user"
+        verbose_name_plural = "users"
+        ordering = ['last_name']
+
     def __str__(self):
         return self.username
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['created_at']
 
 
 class Artist(User):  # To be expanded
