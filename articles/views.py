@@ -2,6 +2,9 @@ from articles.models import Article
 from articles.serializers import ArticleSerializer
 from rest_framework import generics, permissions
 from articles.permissions import IsOwnerOrReadOnly
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from .forms import ArticleForm
 
 
 class ArticleList(generics.ListCreateAPIView):
@@ -26,3 +29,19 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
+
+def article_image_view(request):
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect('success')
+    else:
+        form = ArticleForm()
+    return render(request, 'article_form.html', {'form': form})
+
+
+def success(request):
+    return HttpResponse('successfully uploaded')
