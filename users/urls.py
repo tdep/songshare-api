@@ -1,14 +1,8 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from users import views
+from users.views import UserViewSet
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('', views.api_root),
-    path('users/',
-         views.UserList.as_view(),
-         name='user-list'),
-    path('users/<int:pk>/',
-         views.UserDetail.as_view(),
-         name='user-detail'),
-    path('registration/', views.registration, name='registration')
-]
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+urlpatterns = router.urls
