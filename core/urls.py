@@ -31,6 +31,7 @@ url_helper.register_app_models()
 
 urlpatterns = [
     path('songshareapiadmin/', admin.site.urls),
+    path('authorization/', include('authorization.urls')),
     path('', include('articles.urls')),
     path('', include('users.urls')),
     path('', include('songs.urls')),
