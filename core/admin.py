@@ -21,8 +21,6 @@ admin.site.register(User, UserAdmin)
 
 # TODO: Build admin
 # TODO: Set user permissions
-
-# TODO: Create mock database
-
+# TODO: Write validations
 # TODO: Write tests
 # TODO: Test in postman

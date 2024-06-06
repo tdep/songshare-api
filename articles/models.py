@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings
+from django.contrib import auth
 from django_resized import ResizedImageField
 
 
@@ -7,7 +7,7 @@ class Article(models.Model):
     published = models.DateField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        'auth.User',
         related_name='articles',
         on_delete=models.CASCADE)
     description = models.TextField(max_length=1000)

@@ -1,29 +1,83 @@
 from django.db import models
-from django.contrib.auth.models import Group, Permission, AbstractUser
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.validators import RegexValidator
 from django_resized import ResizedImageField
 
 
-class User(AbstractUser):
-    created_at = models.DateTimeField(auto_now_add=True)
+class BasicUserModel(BaseUserManager):
+    def create_user(self, username, email, phone_number, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must not be empty')
+        if not phone_number:
+            raise ValueError('The Phone Number field must not be empty')
+        email = self.normalize_email(email)
+        user = self.model(username=username.strip(), email=email, phone_number=phone_number, **extra_fields)
+        user.set_password(password)
+        user.save(using=self.db)
+        return user
+
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True')
+
+        return self.create_user(username, email, password, **extra_fields)
+
+
+class SongShareUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('subscriber', 'Subscriber'),
+        ('artist', 'Artist'),
+        ('admin', 'Admin'),
+    )
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
+
     username = models.CharField(
-        max_length=100,
-        blank=False,
-        default='',
-        unique=True)
-    first_name = models.CharField(max_length=100, default='')
-    last_name = models.CharField(max_length=100, default='')
-    is_staff = models.BooleanField(default=False)
+        max_length=150,
+        unique=True,
+        help_text='Required. 150 characters or fewer. Letters, digits, and spaces only.',
+        validators=[],
+        error_messages={
+            'unique': "A user with that username already exists.",
+        }
+    )
     email = models.CharField(
         max_length=256,
         blank=False,
-        default='',
-        unique=True)
+        unique=True,
+        help_text='Required, 256 characters or fewer.',
+        validators=[],
+        error_messages={
+            'unique': "An account using that email address already exists."
+        }
+    )
+    phone_regex = RegexValidator(
+        regex=r'^\?1?\d{9,15}$',
+        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+    )
     phone_number = models.CharField(
-        max_length=20,
+        validators=[phone_regex],
+        max_length=17,
+        null=False,
         blank=False,
-        default='',
-        unique=True)
+        unique=True,
+        error_messages={
+            'unique': "An account using that phone number already exists."
+        }
+    )
+    first_name = models.CharField(
+        max_length=20,
+        blank=True
+    )
+    last_name = models.CharField(
+        max_length=20,
+        blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
     bio = models.TextField(max_length=2000)
     avatar = ResizedImageField(
         size=[640, 640],
@@ -31,19 +85,19 @@ class User(AbstractUser):
         upload_to='images/',
         force_format='PNG')
 
-    class Meta:
-        verbose_name = "user"
-        verbose_name_plural = "users"
-        ordering = ['last_name']
+    def is_subscriber(self):
+        return self.user_type == 'subscriber'
 
-    def __str__(self):
-        return self.username
+    def is_artist(self):
+        return self.user_type == 'artist'
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def is_admin(self):
+        return self.user_type == 'admin'
+
+    objects = BasicUserModel()
 
 
-class Artist(User):  # To be expanded
+class Artist(BasicUserModel):  # To be expanded
     # Articles
     # Events
     # Songs
@@ -55,7 +109,7 @@ class Artist(User):  # To be expanded
     pass
 
 
-class Subscriber(User):
+class Subscriber(BasicUserModel):
     # Favorite Songs
     # Events Attended/ing
     # Messages
@@ -65,7 +119,7 @@ class Subscriber(User):
     pass
 
 
-class Admin(User):
+class Admin(BasicUserModel):
     # Articles (Author)
     # Events
     # Permissions: [
