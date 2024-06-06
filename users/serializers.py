@@ -7,6 +7,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ['id', 'username', 'email', 'articles']
-
-# The user serializer might work for all types of users, but we may need specific views for users of different types
+        fields = ['id', 'user_type', 'is_staff',
+                  'is_superuser', 'username', 'email',
+                  'phone_number', 'first_name', 'last_name',
+                  'created_at', 'bio', 'avatar', 'articles']

@@ -1,17 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.core.validators import RegexValidator
 from django_resized import ResizedImageField
+from phonenumber_field.modelfields import PhoneNumberField
 
 
-class BasicUserModel(BaseUserManager):
-    def create_user(self, username, email, phone_number, password=None, **extra_fields):
+class BasicUserManager(BaseUserManager):
+    def create_user(self, username, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must not be empty')
-        if not phone_number:
-            raise ValueError('The Phone Number field must not be empty')
         email = self.normalize_email(email)
-        user = self.model(username=username.strip(), email=email, phone_number=phone_number, **extra_fields)
+        user = self.model(username=username.strip(), email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self.db)
         return user
@@ -55,13 +53,7 @@ class SongShareUser(AbstractUser):
             'unique': "An account using that email address already exists."
         }
     )
-    phone_regex = RegexValidator(
-        regex=r'^\?1?\d{9,15}$',
-        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
-    )
-    phone_number = models.CharField(
-        validators=[phone_regex],
-        max_length=17,
+    phone_number = PhoneNumberField(
         null=False,
         blank=False,
         unique=True,
@@ -94,10 +86,10 @@ class SongShareUser(AbstractUser):
     def is_admin(self):
         return self.user_type == 'admin'
 
-    objects = BasicUserModel()
+    objects = BasicUserManager()
 
 
-class Artist(BasicUserModel):  # To be expanded
+class Artist(BasicUserManager):  # To be expanded
     # Articles
     # Events
     # Songs
@@ -109,7 +101,7 @@ class Artist(BasicUserModel):  # To be expanded
     pass
 
 
-class Subscriber(BasicUserModel):
+class Subscriber(BasicUserManager):
     # Favorite Songs
     # Events Attended/ing
     # Messages
@@ -119,7 +111,7 @@ class Subscriber(BasicUserModel):
     pass
 
 
-class Admin(BasicUserModel):
+class Admin(BasicUserManager):
     # Articles (Author)
     # Events
     # Permissions: [

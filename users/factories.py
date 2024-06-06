@@ -1,12 +1,12 @@
 import factory
 from factory.django import DjangoModelFactory
 
-from .models import User
+from .models import SongShareUser
 
 
 class UserFactory(DjangoModelFactory):
     class Meta:
-        model = User
+        model = SongShareUser
 
     username = factory.Faker('words', unique=True)
     first_name = factory.Faker('first_name')

@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from articles.models import Article
 from articles.factories import ArticleFactory
-from users.models import User
+from users.models import SongShareUser
 from users.factories import UserFactory
 
 NUM_USERS = 20
@@ -18,7 +18,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         self.stdout.write("Deleting old data...")
-        models = [Article, User]
+        models = [Article, SongShareUser]
         for m in models:
             m.objects.all().delete()
 
