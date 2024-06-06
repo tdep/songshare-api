@@ -9,6 +9,7 @@ from rest_framework.reverse import reverse
 
 User = get_user_model()
 
+
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
@@ -31,12 +32,3 @@ class UserDetail(generics.RetrieveAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-
-class ArtistDetail(generics.GenericAPIView):  # Example of custom view
-    queryset = Artist.objects.all()
-    renderer_classes = [renderers.StaticHTMLRenderer]
-
-    def get(self, request, *args, **kwargs):
-        artist = self.get_object()
-        return Response(artist.first_name)

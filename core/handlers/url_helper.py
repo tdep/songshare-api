@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from users.models import User, Admin, Artist, Subscriber
+from users.models import SongShareUser
 from articles.models import Article
 
 
 def register_app_models():
-    models = [User, Admin, Artist, Subscriber, Article]
+    models = [SongShareUser, Article]
     for model in models:
         admin.site.register(model)
