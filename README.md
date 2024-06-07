@@ -11,7 +11,7 @@ The SongShare-API serves as a service layer for social media applications based 
 7. Run the seeder for dummy data: `python manage.py setup_test_data` 
    1. This creates a group of `'subscriber'` users and article instances.
    2. To create `'admin'` users, see the next step.
-8. Create a user: `python manage.py create_admin_user` 
+8. Create admin user: `python manage.py create_admin_user` 
 9. Run the server: `python manage.py runserver` 
 10. Open the API in the browser, sign in, and poke around using the endpoints below.
 
