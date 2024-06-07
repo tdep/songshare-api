@@ -9,3 +9,8 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         model = Article
         fields = ['id', 'published', 'title', 'author', 'description', 'article_image', 'content', 'shares']
         read_only_fields = ['id', 'published', 'author', 'shares']
+
+
+class FavoriteArticleSerializer(serializers.ModelSerializer):
+    # Logic for user likes goes here
+    pass
