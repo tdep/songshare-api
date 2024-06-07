@@ -34,27 +34,30 @@ The token needs to be refreshed every `5 minutes`.
 - Favorite functionality (for articles)
 - Sharing functionality
 - Write logout functionality (once you sign in, you can never leave!)
-
+- Fix the browsable API
+- Add `Events`, `Songs`, `Messages` apps
 ---
 
 ## Models
 ### SongShareUser
-| field          | datatype   | constraints                                                  |
-|----------------|------------|--------------------------------------------------------------|
-| `id`           | `int`      | auto-populated, incremental                                  |
-| `username`     | `str`      | required, <150 chars, unique, a-z \| 0-9                     |
-| `password`     | `str`      | required                                                     |
-| `first_name`   | `str`      | required for admin                                           |
-| `last_name`    | `str`      | *none*                                                       |
-| `email`        | `str`      | required, <256 chars, unique, valid ("@")                    |
-| `phone_number` | `str`      | required, unique, format=`+12121235551234`                   |
-| `user_type`    | `str`      | set automatically for `'subscriber'` and `'admin'` currently |
-| `is_active`    | `bool`     | set automatically                                            |
-| `is_staff`     | `bool`     | set automatically                                            |
-| `is_superuser` | `bool`     | set automatically                                            |
-| `groups`       | `list`     | set automatically                                            |
-| `permissions`  | `list`     | set automatically                                            |
-| `created_at`   | `datetime` | set automatically                                            |
+| field          | datatype   | constraints                                                                          |
+|----------------|------------|--------------------------------------------------------------------------------------|
+| `id`           | `int`      | auto-populated, incremental                                                          |
+| `username`     | `str`      | required, <150 chars, unique, a-z \| 0-9                                             |
+| `password`     | `str`      | required                                                                             |
+| `first_name`   | `str`      | required for admin, <20 chars                                                        |
+| `last_name`    | `str`      | < 20 chars                                                                           |
+| `email`        | `str`      | required, <256 chars, unique, valid ("@")                                            |
+| `phone_number` | `str`      | required, unique, format=`+12121235551234`                                           |
+| `user_type`    | `str`      | set automatically for `'subscriber'` and `'admin'` currently                         |
+| `is_active`    | `bool`     | set automatically                                                                    |
+| `is_staff`     | `bool`     | set automatically                                                                    |
+| `is_superuser` | `bool`     | set automatically                                                                    |
+| `groups`       | `list`     | set automatically                                                                    |
+| `permissions`  | `list`     | set automatically                                                                    |
+| `created_at`   | `datetime` | set automatically                                                                    |
+| `bio`          | `text`     | <2000 chars                                                                          |
+| `avatar`       | `__file__` | automatically resized to 640x640/cropped from center -> out/formatted into a `'PNG'` |
 
 ### SongShareUserGroup
 These are created programmatically
@@ -64,6 +67,17 @@ These are created programmatically
 | `name`        | `str`    | *none*      |
 | `description` | `str`    | *none*      |
 | `permissions` | `list`   | *none*      |
+
+### Article
+| field           | datatype   | constraints                                                                            |
+|-----------------|------------|----------------------------------------------------------------------------------------|
+| `id`            | `int`      | auto-populated, incremental                                                            |
+| `title`         | `str`      | <100 chars                                                                             |
+| `author`        | `str`      | set automatically by logged in admin                                                   |
+| `description`   | `text`     | < 1000 chars                                                                           |
+| `article_image` | `__file__` | automatically resized to 1280x1280/cropped from center -> out/formatted into a `'PNG'` |
+| `content`       | `text`     | *none*                                                                                 |
+| `shares`        | `int`      | default=0, doesn't do anything yet                                                     |
 
 ---
 
