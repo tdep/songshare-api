@@ -22,12 +22,8 @@ from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshVie
 from users.views import UserViewSet
 from .handlers import url_helper
 
-admin.site.site_title = "SongShareAPI Admin"
-admin.site.site_header = "SongShare administration"
-admin.site.index_title = "Site administration"
-
 # Helper to register all models programmatically.
-url_helper.register_app_models()
+# url_helper.register_app_models()
 
 urlpatterns = [
     path('songshareapiadmin/', admin.site.urls),

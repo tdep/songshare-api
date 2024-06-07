@@ -1,6 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth import get_user_model
 from users.models import SongShareUser
 
 
@@ -23,11 +23,8 @@ class SongShareUserAdmin(UserAdmin):
     )
 
 
+admin.site.site_title = "SongShareAPI Admin"
+admin.site.site_header = "User Admin"
+admin.site.index_title = "Site administration"
+
 admin.site.register(SongShareUser, SongShareUserAdmin)
-
-
-# TODO: Build admin
-# TODO: Set user permissions
-# TODO: Write validations
-# TODO: Write tests
-# TODO: Test in postman

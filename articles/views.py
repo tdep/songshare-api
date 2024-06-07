@@ -29,28 +29,3 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
-
-def article_image_view(request):
-
-    if request.method == 'POST':
-        form = ArticleForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            form.save()
-            return redirect('success')
-    else:
-        form = ArticleForm()
-    return render(request, 'article_form.html', {'form': form})
-
-
-def success(request):
-    return HttpResponse('successfully uploaded')
-
-
-def display_article_images(request):
-
-    if request.method == 'GET':
-
-        articles = Article.objects.all()
-        return render(request, 'display_article_images.html', {'article_images': articles})
-
