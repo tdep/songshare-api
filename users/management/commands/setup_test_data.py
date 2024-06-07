@@ -5,8 +5,8 @@ from django.core.management.base import BaseCommand
 
 from articles.models import Article
 from articles.factories import ArticleFactory
-from users.models import SongShareUser
-from users.factories import UserFactory
+from users.models import SongShareUser, SongShareUserGroup
+from users.factories import UserFactory, GroupFactory
 
 NUM_USERS = 20
 NUM_ARTICLES = 10
@@ -18,15 +18,19 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         self.stdout.write("Deleting old data...")
-        models = [Article, SongShareUser]
+        models = [Article, SongShareUser, SongShareUserGroup]
         for m in models:
             m.objects.all().delete()
 
         self.stdout.write("Creating new data...")
+        # Create a group
+        group = GroupFactory()
+
         # Create some users
         users = []
         for _ in range(NUM_USERS):
             user = UserFactory()
+            user.groups.add(group)
             users.append(user)
 
         # Create some articles

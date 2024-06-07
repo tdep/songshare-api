@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin
-from users.models import SongShareUser
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.utils.translation import gettext_lazy as _
+from users.models import SongShareUser, SongShareUserGroup
 
 
 class SongShareUserAdmin(UserAdmin):
@@ -28,3 +29,12 @@ admin.site.site_header = "User Admin"
 admin.site.index_title = "Site administration"
 
 admin.site.register(SongShareUser, SongShareUserAdmin)
+admin.site.unregister(Group)
+
+
+@admin.register(SongShareUserGroup)
+class SongShareGroupAdmin(GroupAdmin):
+    fieldsets = (
+        (None, {'fields': ('name', 'permissions')}),
+        (_('Description'), {'fields': ('description',)}),
+    )

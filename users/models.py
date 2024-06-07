@@ -1,11 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Group, GroupManager, Permission
 from django_resized import ResizedImageField
 from phonenumber_field.modelfields import PhoneNumberField
+from articles.permissions import IsAdminOrReadOnly
 
 
 class BasicUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault('user_type', 'subscriber')
         if not email:
             raise ValueError('The Email field must not be empty')
         email = self.normalize_email(email)
@@ -15,6 +17,7 @@ class BasicUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault('user_type', 'admin')
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -89,7 +92,14 @@ class SongShareUser(AbstractUser):
     objects = BasicUserManager()
 
 
-class Artist(BasicUserManager):  # To be expanded
+class BasicSongShareUserGroupManager(GroupManager):
+    def create_artist_group(self):
+        group = Group.objects.create(name="Artist Group")
+        group.permissions.add(IsAdminOrReadOnly)
+
+
+class SongShareUserGroup(Group):
+    description = models.TextField(blank=True)
     # Articles
     # Events
     # Songs

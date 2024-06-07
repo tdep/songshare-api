@@ -3,7 +3,7 @@ from articles.models import Article
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.ReadOnlyField(source='author.username')  # to make this a hyperlink, change to Hyperlinked
+    author = serializers.ReadOnlyField(source='author.username')  # to make this a hyperlink, change to Hyperlinked
 
     class Meta:
         model = Article
