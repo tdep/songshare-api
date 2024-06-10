@@ -2,7 +2,7 @@
 The SongShare-API serves as a service layer for social media applications based around music.
 
 ### To run locally:
-1. Fork the repo 
+1. Clone the repo 
 2. Make sure you have `python 3.x.x` installed on your system 
 3. In the directory run: `python3 -m venv env` 
 4. Then run: `source env/bin/activate` 
